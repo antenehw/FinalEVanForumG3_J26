@@ -17,32 +17,31 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx/ProtectedRoute";
 export const AppState = createContext();
 
 function App() {
-  //to access username globally
   const [user, setuser] = useState(null);
-
-  // checking user for all render
   const [token, setToken] = useState(localStorage.getItem("token"));
-
   const navigate = useNavigate();
 
-  async function checkUser() {
-    try {
-      const { data } = await axios.get("/users/check", {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      setuser(data);
-    } catch (error) {
-      console.log(error.response);
-      localStorage.removeItem("token");
-      setToken(null);
-      setuser(null);
-      navigate("/login");
-    }
-  }
   useEffect(() => {
-    checkUser();
-  }, [token]);
+    async function checkUser() {
+      try {
+        const { data } = await axios.get("/users/check", {
+          headers: { Authorization: "Bearer " + token },
+        });
+
+        setuser(data);
+      } catch (error) {
+        console.log(error?.response);
+        localStorage.removeItem("token");
+        setToken(null);
+        setuser(null);
+        navigate("/login");
+      }
+    }
+
+    if (token) {
+      checkUser();
+    }
+  }, [token, navigate]);
 
   return (
     <AppState.Provider value={{ user, token, setuser, setToken }}>
