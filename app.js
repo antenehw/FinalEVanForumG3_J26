@@ -1,7 +1,7 @@
 
 const express = require("express");
 const cors = require("cors");
-const port = 5000;
+// const port = 5000;
 
 const app = express();
 app.use(cors());
@@ -10,7 +10,7 @@ app.use(cors());
 const dbconnection = require("./db/dbconfig");
 
 
-
+// Route imports
 //user routes middleware file import
 const userRoutes = require("./routes/userRoute");
 
@@ -24,7 +24,7 @@ const answerRoutes = require("./routes/answerRoute");
 const likeUnlikeComentRoutes = require("./routes/likeUnlikeComentRoute");
 
 
-//json middleware to extract json data
+//Json middleware to extract json data
 app.use(express.json());
 
 
@@ -42,13 +42,16 @@ app.use("/api/answers",  answerRoutes);
 app.use("/api/answers", likeUnlikeComentRoutes);
 
 
-async function start() {
-  try {
-    const result = await dbconnection.execute("select 'test' ");
-    // console.log(result)
-    await app.listen(port);
-    console.log("database connection established");
-    console.log(`server is running at ${port}`);
+// Cloud Run requires this: 
+const port = process.env.PORT || 5000;
+
+async function start() { 
+  try { 
+    await dbconnection.execute("select 'test'"); 
+    app.listen(port, () => { 
+      console.log(`Server running on port ${port}`); 
+      console.log("Database connection established"); });
+    
   } catch (error) {
     console.log(error.message);
   }
