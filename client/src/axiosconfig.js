@@ -1,5 +1,6 @@
-
 import axios from "axios";
+
+console.log("Loaded API URL:", import.meta.env.VITE_API_URL);
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL
@@ -24,34 +25,4 @@ instance.interceptors.response.use(
   }
 );
 
-
 export default instance;
-
-
-
-
-// import axios from "axios";
-
-
-// const instance = axios.create({
-//   baseURL: "http://localhost:5500/api",
-// });
-
-
-
-
-
-
-// instance.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem("token");
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
-// export default instance;
-
